@@ -66,3 +66,7 @@ class TicTacToe:
     # Return index/number of empty squares
     def available_moves(self):
         return [i for i, x in enumerate(self.board) if x == ' ']
+
+    # Test Comment
+    def play():
+        pass
