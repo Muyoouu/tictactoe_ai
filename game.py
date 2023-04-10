@@ -1,4 +1,7 @@
 
+import time
+from player import HumanPlayer, SmartComputerPlayer, RandomComputerPlayer
+
 class TicTacToe:
     def __init__(self):
         self.board = self.make_board()
@@ -67,6 +70,52 @@ class TicTacToe:
     def available_moves(self):
         return [i for i, x in enumerate(self.board) if x == ' ']
 
-    # Test Comment
-    def play():
-        pass
+# Function to play the game
+def play(game, x_player, o_player, print_game=True):
+    
+    # Visualize board
+    if print_game:
+        game.print_board_nums()
+        print("")
+
+    # 'X' always go first
+    letter = "X"
+    # Plays goes loop until no empty square
+    while game.empty_square():
+        if letter == "X":
+            square = x_player.get_move(game)
+        else:
+            square = o_player.get_move(game)
+    
+        # Check if move is valid and successfully done
+        if game.make_move(square, letter):
+
+            # Visualize board
+            if print_game:
+                print(f"{letter}'s makes a move to square {square}")
+                game.print_board()
+                print("")
+            
+            # Break the loop, stop the game if there is winner
+            if game.current_winner:
+                if print_game:
+                    print(f"{letter}'s wins!")
+                return letter
+            
+            # Change turns
+            letter = "O" if letter == "X" else "X"
+
+        # Add gap time inbetween turns
+        time.sleep(0.8)
+
+    # Tie if loop ends i.e. no available moves yet no winner
+    if print_game:
+        print("It's a tie!")
+
+if __name__ == "__main__":
+    x_player = SmartComputerPlayer("X")
+    o_player = HumanPlayer("O")
+    game = TicTacToe()
+    
+    play(game, x_player, o_player)
+    
