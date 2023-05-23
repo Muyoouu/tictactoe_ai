@@ -112,10 +112,36 @@ def play(game, x_player, o_player, print_game=True):
     if print_game:
         print("It's a tie!")
 
+def activate_player(player:str, letter:str):
+    match player.upper():
+        case "HUMAN":
+            return HumanPlayer(letter)
+        case "EASY_AI":
+            return RandomComputerPlayer(letter)
+        case "SMART_AI":
+            return SmartComputerPlayer(letter)
+        case _:
+            print("Invalid selection of Player")
+            raise ValueError
+
+def get_player(letter, player_list):
+    while True:
+        player = input(f"Choose {letter} player ({', '.join(player_list)}): ").upper()
+        if player in player_list:
+            return player
+        print(f"Invalid selection of Player, choose only from this list ({', '.join(player_list)}) and don't forget the '_' as written", end="\n\n")
+
 if __name__ == "__main__":
-    x_player = SmartComputerPlayer("X")
-    o_player = HumanPlayer("O")
     game = TicTacToe()
+    available_player = ["HUMAN", "EASY_AI", "SMART_AI"]
+
+    x_player = get_player("X", available_player)
+    x_player = activate_player(x_player, "X")
+
     
+    o_player = get_player("O", available_player)
+    o_player = activate_player(o_player, "O")
+    
+    print("")
     play(game, x_player, o_player)
     
