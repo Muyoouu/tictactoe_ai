@@ -3,25 +3,32 @@ import time
 from player import HumanPlayer, SmartComputerPlayer, RandomComputerPlayer
 
 class TicTacToe:
+    # Initialize with instance variables, Board and Winner
     def __init__(self):
         self.board = self.make_board()
         self.current_winner = None
 
+    # Staticmethod: method that is bound to the class, not the objects
+    # Make a list of tictactoe 9 boxes to represent a board
     @staticmethod
     def make_board():
         return [' ' for i in range(9)]
     
+    # Function to display the board in the CLI for user
     def print_board(self):
         for row in [self.board[i*3:(i+1)*3] for i in range(3)]:
             print('|' + '|'.join(row) + '|')
     
 
+    # Function to display the board reference number in the CLI for user instruction
     @staticmethod
     def print_board_nums():
         number_board = [[str(j) for j in range(i*3, (i+1)*3)] for i in range(3)]
         for row in number_board:
             print('|' + '|'.join(row) + '|')
 
+    # Check the move is valid i.e. box selected in the board is empty and available
+    # While do the function call to check the winner
     def make_move(self, square, letter):
         if self.board[square] == ' ':
             self.board[square] = letter
@@ -30,6 +37,8 @@ class TicTacToe:
             return True
         return False
     
+    # Check the winner in the current state of the game
+    # Check all possible winning condition in tictactoe
     def winner(self, square, letter):
         # Check the current row index
         row_i = square // 3
@@ -112,6 +121,7 @@ def play(game, x_player, o_player, print_game=True):
     if print_game:
         print("It's a tie!")
 
+# Initialize object for player
 def activate_player(player:str, letter:str):
     match player.upper():
         case "HUMAN":
@@ -124,6 +134,7 @@ def activate_player(player:str, letter:str):
             print("Invalid selection of Player")
             raise ValueError
 
+# Prompt the user for player selection
 def get_player(letter, player_list):
     while True:
         player = input(f"Choose {letter} player ({', '.join(player_list)}): ").upper()

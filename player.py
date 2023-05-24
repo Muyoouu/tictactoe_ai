@@ -1,6 +1,7 @@
 from random import choice
 import math
 
+# Act as a parent class (blueprint) for all types of player
 class Player:
     def __init__(self, letter):
         self.letter = letter
@@ -8,6 +9,7 @@ class Player:
     def get_move(self, game):
         pass
 
+# Human player prompts for user input in each turn
 class HumanPlayer(Player):
     def __init__(self, letter):
         super().__init__(letter)
@@ -26,6 +28,7 @@ class HumanPlayer(Player):
                 print("Invalid square. Try again.")
         return val
 
+# Random comp player selects random available box in each turn
 class RandomComputerPlayer(Player):
     def __init__(self, letter):
         super().__init__(letter)
@@ -34,10 +37,13 @@ class RandomComputerPlayer(Player):
         square = choice(game.available_moves())
         return square
     
+# Smart comp player do min-max algorithm for taking moves in each turn
 class SmartComputerPlayer(Player):
     def __init__(self, letter):
         super().__init__(letter)
     
+    # Do random moves if having first turn (as the algorithm need at least 1 existing moves to consider)
+    # Else, it calls the algorithm function 
     def get_move(self, game):
         if game.count_empty_square() == 9:
             square = choice(game.available_moves())
