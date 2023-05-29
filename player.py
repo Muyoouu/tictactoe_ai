@@ -68,25 +68,33 @@ class SmartComputerPlayer(Player):
             # Score positive if Comp is the winner, else negative
             score = 1 * (game.count_empty_square() + 1) if other_player == max_player else -1 * (game.count_empty_square() + 1)
             return None, score
-
+        
+        # Return 0 as score if there is no empty squares
         elif not game.empty_square():
             return None, 0
 
+        # For Comp turn, search for best score as 'max' score
         if letter == max_player:
             best = None, -math.inf
+        # Otherwise, for other player search for best score as 'min' score
         else:
             best = None, math.inf
 
+        # Simulate each possible move
         for possible_move in game.available_moves():
             game.make_move(possible_move, letter)
+            # Recursively call minimax function for each move
             _, simulation_score = self.minimax(game, other_player, memo)
 
+            # Undo simulation move
             game.board[possible_move] = " "
             game.current_winner = None
 
+            # For Comp turn, search for best score as 'max' score
             if letter == max_player:
                 if simulation_score > best[1]:
                     best = possible_move, simulation_score
+            # Otherwise, for other player search for best score as 'min' score
             else:
                 if simulation_score < best[1]:
                     best = possible_move, simulation_score
