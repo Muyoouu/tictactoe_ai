@@ -48,52 +48,50 @@ class SmartComputerPlayer(Player):
         if game.count_empty_square() == 9:
             square = choice(game.available_moves())
         else:
-            square = self.minimax(game, self.letter)["position"]
+            square, _ = self.minimax(game, self.letter)
         return square
     
-    def minimax(self, game, letter):
+    def minimax(self, game, letter, memo={}):
         # Computer is always max player
         max_player = self.letter
         other_player = "O" if letter == "X" else "X"
-    
-        # Base Case
-        # Check if the previous move won
-        if game.current_winner == other_player:
-            # Score positive if Comp is winner, else negative
-            return {"position": None, 
-                    "score": 1 * (game.count_empty_square() + 1) if other_player == max_player 
-                    else -1 * (game.count_empty_square() + 1)}
-        # Return 0 as score if there is no empty squares
-        elif not game.empty_square():
-            return {"position": None, "score": 0}
-        
-        # For Comp turn, search for best score as 'max' score
-        if letter == max_player:
-            best = {"position": None, "score": -math.inf}
-        # Otherwise, for Human player search for best score as 'min' score
-        else:
-            best = {"position": None, "score": math.inf}
 
-        # Simulate each possible move
+        # Generate a unique key for the current game state
+        key = tuple(game.board + [letter])
+
+        # Check if the best move for the current game state is already computed and stored in the memo
+        if key in memo:
+            return memo[key]
+
+        # Base Case
+        if game.current_winner == other_player:
+            # Score positive if Comp is the winner, else negative
+            score = 1 * (game.count_empty_square() + 1) if other_player == max_player else -1 * (game.count_empty_square() + 1)
+            return None, score
+
+        elif not game.empty_square():
+            return None, 0
+
+        if letter == max_player:
+            best = None, -math.inf
+        else:
+            best = None, math.inf
+
         for possible_move in game.available_moves():
             game.make_move(possible_move, letter)
-            # Recursively call minimax function for each move
-            simulation_result = self.minimax(game, other_player)
+            _, simulation_score = self.minimax(game, other_player, memo)
 
-            # Undo simulation move
             game.board[possible_move] = " "
             game.current_winner = None
 
-            # Set this move in simulation 'position'
-            simulation_result["position"] = possible_move
-
-            # For Comp turn, search for best score as 'max' score
             if letter == max_player:
-                if simulation_result["score"] > best["score"]:
-                    best = simulation_result
-            # Otherwise, for Human player search for best score as 'min' score
+                if simulation_score > best[1]:
+                    best = possible_move, simulation_score
             else:
-                if simulation_result["score"] < best["score"]:
-                    best = simulation_result
+                if simulation_score < best[1]:
+                    best = possible_move, simulation_score
+
+        # Store the best move for the current game state in the memo
+        memo[key] = best
         return best
 
