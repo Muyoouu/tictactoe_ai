@@ -31,8 +31,11 @@
 
 Tic tac toe game in Command Line Interface, with AI (algorithm) as opponent, built in Python.
 
-__Credit__: copy project from this [Youtube](https://youtu.be/fT3YWCKvuQE) tutorial by [__kying18__](https://github.com/kying18).
+__Credit__: Project inspired by [Youtube](https://youtu.be/fT3YWCKvuQE) tutorial from [__kying18__](https://github.com/kying18).
 
+#### Added feature:  
+1. __Memoization__ - by caching algorithm calculation results, the program eliminates redundant calculations, resulting in improved performance and efficiency.
+2. __Player Selection Prompt__ - at the start of the game, users can choose to play against a human opponent or select from two AI difficulty levels: easy AI or smart AI.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
